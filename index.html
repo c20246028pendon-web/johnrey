@@ -1,90 +1,109 @@
-<!DOCTYPE html>
-<html lang="en">
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>PENDON | Portfolio</title>
+        <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+        <style type="text/tailwindcss">
+            @custom-variant dark (&:where(.dark, .dark *));
+            @layer components {
+                .btn-primary {
+                    @apply inline-flex items-center justify-center px-6 py-2.5 rounded-full bg-black text-white hover:bg-zinc-800 dark:bg-yellow-400 dark:text-black dark:hover:bg-yellow-300 font-bold text-sm tracking-wide transition-all shadow-md active:scale-95 cursor-pointer;
+                }
+                .btn-secondary {
+                    @apply inline-flex items-center justify-center px-6 py-2.5 rounded-full bg-yellow-400 text-black font-bold text-sm tracking-wide hover:bg-yellow-300 transition-all shadow-md active:scale-95 cursor-pointer;
+                }
+                .btn-accent {
+                    @apply inline-flex items-center justify-center px-6 py-2.5 rounded-full border-2 border-black text-black dark:border-white dark:text-white font-bold text-sm tracking-wide hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all active:scale-95 cursor-pointer;
+                    @apply inline-flex items-center gap-2 bg-yellow-400 text-black rounded-full px-5 py-2 font-bold text-sm shadow-md;
+                }
+            }
+        </style>
+    </head>
+    <body class="bg-zinc-100 text-zinc-900 dark:bg-black dark:text-white min-h-screen flex items-center justify-center p-4 md:p-10 font-sans antialiased transition-colors duration-300">
+        <div class="w-full max-w-5xl bg-white dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-800 rounded-[32px] p-6 sm:p-10 shadow-2xl space-y-10 transition-colors duration-300">
+            <header class="flex flex-wrap items-center justify-between gap-4 border-b border-zinc-200 dark:border-zinc-800 pb-6">
+                <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 rounded-full bg-yellow-400 inline-block"></span>
+                    <span class="font-extrabold tracking-tight text-xl text-zinc-900 dark:text-white">PENDON</span>
+                </div>
+                <nav class="hidden sm:flex items-center gap-6 text-sm font-semibold text-zinc-600 dark:text-zinc-400">
+                    <a href="#projects" class="hover:text-yellow-500 transition-colors">Projects</a>
+                    <a href="#services" class="hover:text-yellow-500 transition-colors">Services</a>
+                    <a href="#contact" class="hover:text-yellow-500 transition-colors">Contact</a>
+                </nav>
+                <div class="flex items-center gap-3">
+                    <button id="Toggle" class="btn-accent !px-4 !py-1.5 !text-xs">
+                        Toggle
+                    </button>
+                </div>
+            </header>
+                <div class="pill-badge">
+                    <span class="text-black text-lg">✶</span>
+                    <span>Johnrey V Pendon — @whoisrey</span>
+                </div>
+            </section>
+            <main class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <section id="projects" class="card-panel flex flex-col justify-between space-y-6">
+                    <div class="space-y-3">
+                        <span class="text-xs font-black uppercase tracking-widest text-black/60 dark:text-yellow-400">01 / Works</span>
+                        <h2 class="text-2xl font-black tracking-tight">My Projects</h2>
+                        <p class="text-sm font-medium text-black/80 dark:text-zinc-300 leading-relaxed">
+                            Personal portfolio, payroll system, company website, startup website, and compliance monitoring system.
+                        </p>
+                    </div>
+                    <div>
+                        <button class="btn-primary w-full">View Projects</button>
+                    </div>
+                </section>
+                <section id="services" class="card-panel flex flex-col justify-between space-y-6">
+                    <div class="space-y-3">
+                        <span class="text-xs font-black uppercase tracking-widest text-black/60 dark:text-yellow-400">02 / Capabilities</span>
+                        <h2 class="text-2xl font-black tracking-tight">My Services</h2>
+                        <p class="text-sm font-medium text-black/80 dark:text-zinc-300 leading-relaxed">
+                            Website Creation, System Creation, AI Automation, Database Management, Project Management, Systems Analyst.
+                        </p>
+                    </div>
+                    <div>
+                        <button class="btn-primary w-full">Explore Services</button>
+                    </div>
+                </section>
+                <section id="contact" class="card-panel space-y-5">
+                    <div class="space-y-1">
+                        <span class="text-xs font-black uppercase tracking-widest text-black/60 dark:text-yellow-400">03 / Connect</span>
+                        <h2 class="text-2xl font-black tracking-tight">Let's build together!</h2>
+                    </div>
+                    <form class="space-y-3 text-left">
+                        <div>
+                            <input id="name" type="text" placeholder="Name" required class="form-input">
+                        </div>
+                        <div>
+                            <input id="email" type="email" placeholder="Email" required class="form-input">
+                        </div>
+                        <div>
+                            <textarea id="message" rows="2" placeholder="Message" required class="form-input"></textarea>
+                        </div>
+                        <button type="submit" class="btn-primary w-full">
+                            Send Message
+                        </button>
+                    </form>
+                </section>
+            </main>
+            <footer class="pt-4 border-t border-zinc-200 dark:border-zinc-800 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs text-zinc-500">
+                <p>© Johnrey Pendon (@whoisrey). All rights reserved.</p>
+            </footer>
+        </div>
+        <script>
+            const toggleButton = document.getElementById("Toggle");
+            const html = document.documentElement;
+            toggleButton.addEventListener("click", () => {
+                html.classList.toggle("dark");
+            });
+        </script>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PENDON | Portfolio</title>
+    </body>
 
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-
-    <style type="text/tailwindcss">
-        @custom-variant dark (&:where(.dark, .dark *));
-    </style>
-</head>
-
-<body class="text-center bg-white text-black dark:bg-gray-900 dark:text-white">
- <button id="Toggle" class="mt-5 bg-black text-white px-6 py-3 rounded-lg dark:bg-white dark:text-black">
-        Toggle
-    </button>
-    
-    <h1 class="text-4xl font-bold underline text-red-700 mt-8">
-       Johnrey V Pendon
-    </h1>
-
-   
-
-    <nav class="flex justify-between items-center mx-8 mt-8">
-        <span class="font-bold">@whoisrey</span>
-
-        <ul class="flex gap-5 list-none">
-            <li><a href="#projects" class="hover:text-pink-500">Projects</a></li>
-            <li><a href="#services" class="hover:text-pink-500">Services</a></li>
-            <li><a href="#contact" class="hover:text-pink-500">Contact</a></li>
-        </ul>
-    </nav>
+    </html>
 
 
-    <main class="flex flex-wrap gap-5 m-8">
-
-        <section id="projects" class="flex-1 min-w-[250px] p-5 border bg-green-500 dark:bg-gray-800">
-            <h2 class="text-2xl font-bold text-pink-500 mb-4">My Projects</h2>
-            <p>Personal portfolio, payroll system, company website,
-                startup website, and compliance monitoring system.</p>
-        </section>
-
-        <section id="services" class="flex-1 min-w-[250px] p-5 border bg-pink-500 dark:bg-gray-800">
-            <h2 class="text-2xl font-bold text-pink-500 mb-4">My Services</h2>
-            <p>Website Creation, System Creation, AI Automation,
-                Database Management, Project Management, Systems Analyst.</p>
-        </section>
-
-        <section id="contact"
-            class="flex-1 min-w-[250px] p-5 border bg-white text-black dark:bg-gray-800 dark:text-white">
-            <h2 class="text-2xl font-bold text-pink-500 mb-4">
-                Let's build together!
-            </h2>
-
-            <form class="flex flex-col gap-3">
-                <label for="name">Name</label>
-                <input id="name" type="text" placeholder="Your name" required
-                    class="border rounded p-3 bg-white text-black">
-
-                <label for="email">Email</label>
-                <input id="email" type="email" placeholder="Your email" required
-                    class="border rounded p-3 bg-white text-black">
-
-                <label for="message">Message</label>
-                <textarea id="message" rows="4" placeholder="Your message" required
-                    class="border rounded p-3 bg-white text-black"></textarea>
-
-                <button type="submit"
-                    class="bg-black text-white p-3 rounded-lg hover:bg-pink-400 dark:bg-white dark:text-black">
-                    Send Message
-                </button>
-            </form>
-        </section>
-
-    </main>
-
-    <script>
-        const toggleButton = document.getElementById("Toggle");
-        const html = document.querySelector("html");
-        toggleButton.addEventListener("click", () => {
-            html.classList.toggle("dark");
-        });
-    </script>
-
-</body>
-
-</html>
