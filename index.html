@@ -1,109 +1,284 @@
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>PENDON | Portfolio</title>
-        <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-        <style type="text/tailwindcss">
-            @custom-variant dark (&:where(.dark, .dark *));
-            @layer components {
-                .btn-primary {
-                    @apply inline-flex items-center justify-center px-6 py-2.5 rounded-full bg-black text-white hover:bg-zinc-800 dark:bg-yellow-400 dark:text-black dark:hover:bg-yellow-300 font-bold text-sm tracking-wide transition-all shadow-md active:scale-95 cursor-pointer;
-                }
-                .btn-secondary {
-                    @apply inline-flex items-center justify-center px-6 py-2.5 rounded-full bg-yellow-400 text-black font-bold text-sm tracking-wide hover:bg-yellow-300 transition-all shadow-md active:scale-95 cursor-pointer;
-                }
-                .btn-accent {
-                    @apply inline-flex items-center justify-center px-6 py-2.5 rounded-full border-2 border-black text-black dark:border-white dark:text-white font-bold text-sm tracking-wide hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all active:scale-95 cursor-pointer;
-                    @apply inline-flex items-center gap-2 bg-yellow-400 text-black rounded-full px-5 py-2 font-bold text-sm shadow-md;
-                }
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PENDON | ScrollTrigger Portfolio</title>
+    
+    <!-- Tailwind CSS v4 Browser CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    
+    <style type="text/tailwindcss">
+        @custom-variant dark (&:where(.dark, .dark *));
+        
+        @layer components {
+            .btn-primary {
+                @apply inline-flex items-center justify-center px-6 py-2.5 rounded-full bg-black text-white hover:bg-zinc-800 dark:bg-yellow-400 dark:text-black dark:hover:bg-yellow-300 font-bold text-sm tracking-wide shadow-md cursor-pointer;
             }
-        </style>
-    </head>
-    <body class="bg-zinc-100 text-zinc-900 dark:bg-black dark:text-white min-h-screen flex items-center justify-center p-4 md:p-10 font-sans antialiased transition-colors duration-300">
-        <div class="w-full max-w-5xl bg-white dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-800 rounded-[32px] p-6 sm:p-10 shadow-2xl space-y-10 transition-colors duration-300">
-            <header class="flex flex-wrap items-center justify-between gap-4 border-b border-zinc-200 dark:border-zinc-800 pb-6">
-                <div class="flex items-center gap-2">
-                    <span class="w-3 h-3 rounded-full bg-yellow-400 inline-block"></span>
-                    <span class="font-extrabold tracking-tight text-xl text-zinc-900 dark:text-white">PENDON</span>
+            .btn-accent {
+                @apply inline-flex items-center justify-center gap-2 bg-yellow-400 text-black border-2 border-black dark:border-black rounded-full px-5 py-2 font-bold text-sm shadow-md hover:bg-yellow-300 cursor-pointer;
+            }
+            .card-panel {
+                @apply bg-zinc-50 dark:bg-zinc-900/90 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 sm:p-8 shadow-sm;
+            }
+            .form-input {
+                @apply w-full bg-zinc-100 dark:bg-zinc-800/80 text-zinc-900 dark:text-white border border-zinc-300 dark:border-zinc-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-yellow-400 dark:focus:border-yellow-400;
+            }
+            .pill-badge {
+                @apply inline-flex items-center gap-2 bg-yellow-400 text-black font-bold text-sm px-5 py-2 rounded-full shadow-md;
+            }
+        }
+    </style>
+</head>
+<body class="bg-zinc-100 text-zinc-900 dark:bg-black dark:text-white min-h-screen p-4 md:p-10 font-sans antialiased">
+
+    <!-- Fixed Top Scroll Progress Bar (Scrubbed by ScrollTrigger) -->
+    <div class="fixed top-0 left-0 w-full h-1.5 bg-zinc-200 dark:bg-zinc-800 z-50">
+        <div id="scroll-progress-bar" class="h-full bg-yellow-400 w-full opacity-90" style="clip-path: inset(0% 100% 0% 0%);"></div>
+    </div>
+
+    <!-- Scroll Telemetry HUD Badge -->
+    <div class="fixed bottom-4 right-4 z-50 bg-zinc-900/90 dark:bg-zinc-950/90 text-zinc-200 border border-zinc-700 rounded-full px-4 py-2 text-xs font-mono flex items-center gap-3 backdrop-blur-md shadow-xl">
+        <span class="inline-block w-2 h-2 rounded-full bg-yellow-400 animate-pulse"></span>
+        <span>Scroll: <strong id="scroll-pct" class="text-yellow-400">0%</strong></span>
+        <span class="text-zinc-600">|</span>
+        <span>Direction: <strong id="scroll-dir" class="text-yellow-400">IDLE</strong></span>
+    </div>
+
+    <!-- Main Container Wrapper -->
+    <div class="max-w-5xl mx-auto space-y-12">
+
+        <!-- Header -->
+        <header class="sticky top-4 z-40 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md border border-zinc-300 dark:border-zinc-800 rounded-2xl p-4 sm:px-8 flex flex-wrap items-center justify-between gap-4 shadow-lg">
+            <!-- Brand & Status Indicator -->
+            <div class="flex items-center gap-3">
+                <span id="header-dot" class="w-3.5 h-3.5 rounded-full bg-yellow-400 inline-block shadow-[0_0_8px_rgba(250,204,21,0.8)]"></span>
+                <h1 id="brand-title" class="font-extrabold tracking-tight text-xl text-zinc-900 dark:text-white">JOHNREY PENDON</h1>
+            </div>
+
+            <!-- Navigation Links -->
+            <nav class="hidden md:flex items-center gap-6 text-sm font-semibold text-zinc-600 dark:text-zinc-400">
+                <a id="nav-projects" href="#projects" class="hover:text-yellow-500">Projects</a>
+                <a id="nav-services" href="#services" class="hover:text-yellow-500">Services</a>
+                <a id="nav-contact" href="#contact" class="hover:text-yellow-500">Contact</a>
+            </nav>
+
+            <!-- Header Action Controls -->
+            <div class="flex items-center gap-2">
+                <button id="replayBtn" class="btn-accent !px-4 !py-1.5 !text-xs">
+                    Refresh
+                </button>
+                <button id="Toggle" class="btn-accent !px-4 !py-1.5 !text-xs">
+                    Toggle
+                </button>
+            </div>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="hero-section space-y-4 pt-6">
+            <div class="pill-badge">
+                <span class="text-black text-lg">✶</span>
+                <span>Johnrey V Pendon — @whoisrey</span>
+            </div>
+            <p class="text-zinc-600 dark:text-zinc-400 text-sm max-w-xl font-medium leading-relaxed">
+                Full-stack developer & systems analyst. Scroll down to trigger GSAP ScrollTrigger animations across works, capabilities, and contact touchpoints.
+            </p>
+        </section>
+
+        <!-- Main Content Sections (Stacked for ScrollTrigger scrubbing) -->
+        <main class="space-y-10">
+            
+            <!-- 1. Projects Section -->
+            <section id="projects" class="card-panel space-y-6">
+                <div class="space-y-3">
+                    <span class="text-xs font-black uppercase tracking-widest text-black/60 dark:text-yellow-400">01 / Works</span>
+                    <h2 class="text-3xl font-black tracking-tight">Featured Projects</h2>
+                    <p class="text-sm font-medium text-black/80 dark:text-zinc-300 leading-relaxed max-w-2xl">
+                        Personal portfolio, payroll management suite, corporate startup platforms, and compliance monitoring software designed for efficiency and scale.
+                    </p>
                 </div>
-                <nav class="hidden sm:flex items-center gap-6 text-sm font-semibold text-zinc-600 dark:text-zinc-400">
-                    <a href="#projects" class="hover:text-yellow-500 transition-colors">Projects</a>
-                    <a href="#services" class="hover:text-yellow-500 transition-colors">Services</a>
-                    <a href="#contact" class="hover:text-yellow-500 transition-colors">Contact</a>
-                </nav>
-                <div class="flex items-center gap-3">
-                    <button id="Toggle" class="btn-accent !px-4 !py-1.5 !text-xs">
-                        Toggle
-                    </button>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                    <div class="p-4 bg-zinc-100 dark:bg-zinc-800/60 rounded-xl border border-zinc-200 dark:border-zinc-700/50 space-y-2">
+                        <h3 class="font-bold text-base">Payroll Management System</h3>
+                        <p class="text-xs text-zinc-600 dark:text-zinc-400">Automated tax computation, employee leave tracking, and PDF payslip generation.</p>
+                    </div>
+                    <div class="p-4 bg-zinc-100 dark:bg-zinc-800/60 rounded-xl border border-zinc-200 dark:border-zinc-700/50 space-y-2">
+                        <h3 class="font-bold text-base">Compliance Monitoring Tool</h3>
+                        <p class="text-xs text-zinc-600 dark:text-zinc-400">Real-time analytical dashboards, audit logging, and automated compliance alerts.</p>
+                    </div>
                 </div>
-            </header>
-                <div class="pill-badge">
-                    <span class="text-black text-lg">✶</span>
-                    <span>Johnrey V Pendon — @whoisrey</span>
+
+                <div>
+                    <button class="btn-primary">View Projects</button>
                 </div>
             </section>
-            <main class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <section id="projects" class="card-panel flex flex-col justify-between space-y-6">
-                    <div class="space-y-3">
-                        <span class="text-xs font-black uppercase tracking-widest text-black/60 dark:text-yellow-400">01 / Works</span>
-                        <h2 class="text-2xl font-black tracking-tight">My Projects</h2>
-                        <p class="text-sm font-medium text-black/80 dark:text-zinc-300 leading-relaxed">
-                            Personal portfolio, payroll system, company website, startup website, and compliance monitoring system.
-                        </p>
+
+            <!-- 2. Services Section -->
+            <section id="services" class="card-panel space-y-6">
+                <div class="space-y-3">
+                    <span class="text-xs font-black uppercase tracking-widest text-black/60 dark:text-yellow-400">02 / Capabilities</span>
+                    <h2 class="text-3xl font-black tracking-tight">Core Services</h2>
+                    <p class="text-sm font-medium text-black/80 dark:text-zinc-300 leading-relaxed max-w-2xl">
+                        Comprehensive web development and software architecture capabilities designed to transform operational workflows.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                    <span class="p-3 bg-zinc-100 dark:bg-zinc-800/60 rounded-xl text-xs font-bold border border-zinc-200 dark:border-zinc-700/50 text-center">Website Creation</span>
+                    <span class="p-3 bg-zinc-100 dark:bg-zinc-800/60 rounded-xl text-xs font-bold border border-zinc-200 dark:border-zinc-700/50 text-center">System Creation</span>
+                    <span class="p-3 bg-zinc-100 dark:bg-zinc-800/60 rounded-xl text-xs font-bold border border-zinc-200 dark:border-zinc-700/50 text-center">AI Automation</span>
+                    <span class="p-3 bg-zinc-100 dark:bg-zinc-800/60 rounded-xl text-xs font-bold border border-zinc-200 dark:border-zinc-700/50 text-center">Database Management</span>
+                    <span class="p-3 bg-zinc-100 dark:bg-zinc-800/60 rounded-xl text-xs font-bold border border-zinc-200 dark:border-zinc-700/50 text-center">Project Management</span>
+                    <span class="p-3 bg-zinc-100 dark:bg-zinc-800/60 rounded-xl text-xs font-bold border border-zinc-200 dark:border-zinc-700/50 text-center">Systems Analysis</span>
+                </div>
+
+                <div>
+                    <button class="btn-primary">Explore Services</button>
+                </div>
+            </section>
+
+            <!-- 3. Contact Section -->
+            <section id="contact" class="card-panel space-y-5">
+                <div class="space-y-1">
+                    <span class="text-xs font-black uppercase tracking-widest text-black/60 dark:text-yellow-400">03 / Connect</span>
+                    <h2 class="text-3xl font-black tracking-tight">Let's build together!</h2>
+                </div>
+                <form class="space-y-4 text-left max-w-xl" onsubmit="event.preventDefault();">
+                    <div>
+                        <input id="name" type="text" placeholder="Name" required class="form-input">
                     </div>
                     <div>
-                        <button class="btn-primary w-full">View Projects</button>
-                    </div>
-                </section>
-                <section id="services" class="card-panel flex flex-col justify-between space-y-6">
-                    <div class="space-y-3">
-                        <span class="text-xs font-black uppercase tracking-widest text-black/60 dark:text-yellow-400">02 / Capabilities</span>
-                        <h2 class="text-2xl font-black tracking-tight">My Services</h2>
-                        <p class="text-sm font-medium text-black/80 dark:text-zinc-300 leading-relaxed">
-                            Website Creation, System Creation, AI Automation, Database Management, Project Management, Systems Analyst.
-                        </p>
+                        <input id="email" type="email" placeholder="Email" required class="form-input">
                     </div>
                     <div>
-                        <button class="btn-primary w-full">Explore Services</button>
+                        <textarea id="message" rows="3" placeholder="Message" required class="form-input"></textarea>
                     </div>
-                </section>
-                <section id="contact" class="card-panel space-y-5">
-                    <div class="space-y-1">
-                        <span class="text-xs font-black uppercase tracking-widest text-black/60 dark:text-yellow-400">03 / Connect</span>
-                        <h2 class="text-2xl font-black tracking-tight">Let's build together!</h2>
-                    </div>
-                    <form class="space-y-3 text-left">
-                        <div>
-                            <input id="name" type="text" placeholder="Name" required class="form-input">
-                        </div>
-                        <div>
-                            <input id="email" type="email" placeholder="Email" required class="form-input">
-                        </div>
-                        <div>
-                            <textarea id="message" rows="2" placeholder="Message" required class="form-input"></textarea>
-                        </div>
-                        <button type="submit" class="btn-primary w-full">
-                            Send Message
-                        </button>
-                    </form>
-                </section>
-            </main>
-            <footer class="pt-4 border-t border-zinc-200 dark:border-zinc-800 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs text-zinc-500">
-                <p>© Johnrey Pendon (@whoisrey). All rights reserved.</p>
-            </footer>
-        </div>
-        <script>
-            const toggleButton = document.getElementById("Toggle");
-            const html = document.documentElement;
-            toggleButton.addEventListener("click", () => {
-                html.classList.toggle("dark");
+                    <button type="submit" class="btn-primary">
+                        Send Message
+                    </button>
+                </form>
+            </section>
+
+        </main>
+
+        <!-- Footer -->
+        <footer class="pt-6 border-t border-zinc-200 dark:border-zinc-800 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs text-zinc-500 pb-12">
+            <p>© Johnrey Pendon (@whoisrey). All rights reserved.</p>
+            <p class="font-mono text-[10px] text-yellow-500">GSAP + ScrollTrigger Active</p>
+        </footer>
+
+    </div>
+
+    <!-- GSAP & ScrollTrigger CDNs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+    <script>
+        // Register ScrollTrigger Plugin
+        gsap.registerPlugin(ScrollTrigger);
+
+        console.log("GSAP Version: ", gsap.version);
+
+        // 1. Initial Header Entrance Timeline
+        const headerTl = gsap.timeline({ defaults: { duration: 0.45, ease: "power2.out" } });
+
+        headerTl.from("#header-dot", {
+            opacity: 0,
+            backgroundColor: "#ffffff"
+        })
+        .from("#brand-title", {
+            opacity: 0,
+            letterSpacing: "10px",
+            filter: "blur(8px)"
+        })
+        .from("nav a", {
+            opacity: 0,
+            filter: "blur(4px)",
+            stagger: 0.15
+        }, "-=0.2")
+        .from("#replayBtn, #Toggle", {
+            opacity: 0,
+            filter: "blur(4px)",
+            stagger: 0.15
+        }, "-=0.2")
+        .from(".pill-badge", {
+            opacity: 0,
+            clipPath: "inset(0% 100% 0% 0%)"
+        });
+
+        // 2. Scroll Progress Bar Scrubbing with ScrollTrigger
+        gsap.to("#scroll-progress-bar", {
+            clipPath: "inset(0% 0% 0% 0%)",
+            ease: "none",
+            scrollTrigger: {
+                trigger: "body",
+                start: "top top",
+                end: "bottom bottom",
+                scrub: 0.2,
+                onUpdate: (self) => {
+                    const pct = Math.round(self.progress * 100);
+                    document.getElementById("scroll-pct").textContent = `${pct}%`;
+                    document.getElementById("scroll-dir").textContent = self.direction === 1 ? "DOWN ↓" : "UP ↑";
+                }
+            }
+        });
+
+        // 3. ScrollTrigger Reveals for Main Content Cards
+        const sections = ["#projects", "#services", "#contact"];
+
+        sections.forEach((secId) => {
+            gsap.from(secId, {
+                opacity: 0,
+                filter: "blur(12px)",
+                clipPath: "inset(0% 0% 100% 0%)",
+                duration: 0.7,
+                ease: "power2.out",
+                scrollTrigger: {
+                    trigger: secId,
+                    start: "top 85%",
+                    toggleActions: "play none none reverse"
+                }
             });
-        </script>
 
-    </body>
+            // Stagger internal elements within each section on scroll
+            gsap.from(`${secId} .btn-primary, ${secId} input, ${secId} textarea`, {
+                opacity: 0,
+                filter: "blur(4px)",
+                stagger: 0.1,
+                duration: 0.4,
+                ease: "power2.out",
+                scrollTrigger: {
+                    trigger: secId,
+                    start: "top 75%",
+                    toggleActions: "play none none reverse"
+                }
+            });
+        });
 
-    </html>
+        // 4. Replay Button Action (Scrolls to top & restarts sequence)
+        const replayButton = document.getElementById("replayBtn");
+        replayButton.addEventListener("click", () => {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+            headerTl.restart();
+            ScrollTrigger.refresh();
+        });
 
+        // 5. Dark Mode Toggle with Cumulative 360 Rotation
+        const toggleButton = document.getElementById("Toggle");
+        const html = document.documentElement;
+        let rotationAngle = 0;
 
+        toggleButton.addEventListener("click", () => {
+            html.classList.toggle("dark");
+
+            rotationAngle += 360;
+            gsap.to(toggleButton, {
+                rotation: rotationAngle,
+                duration: 0.6,
+                ease: "back.out(1.7)"
+            });
+        });
+    </script>
+</body>
+</html>
